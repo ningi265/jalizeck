@@ -47,7 +47,7 @@ const AddProductScreen = ({ navigation }) => {
         imageUrl: image,
       };
 
-      const response = await axios.post('http://192.168.44.245:4000/api/inventory', inventoryData, {
+      const response = await axios.post('https://jbackend-production.up.railway.app/api/inventory', inventoryData, {
         headers: {
           'Content-Type': 'application/json',
         },

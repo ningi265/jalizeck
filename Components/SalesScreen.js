@@ -9,7 +9,7 @@ const SalesScreen = () => {
   useEffect(() => {
     const fetchSales = async () => {
       try {
-        const response = await axios.get('http://192.168.44.245:4000/api/sales');
+        const response = await axios.get('https://jbackend-production.up.railway.app/api/sales');
         setSales(response.data);
       } catch (error) {
         Alert.alert('Error', `Failed to fetch sales: ${error.message}`);

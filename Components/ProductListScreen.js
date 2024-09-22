@@ -9,7 +9,7 @@ const ProductListScreen = ({ navigation }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('http://192.168.44.245:4000/api/inventory');
+      const response = await axios.get('https://jbackend-production.up.railway.app/api/inventory');
       setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);

@@ -16,7 +16,7 @@ const ProductDetailScreen = ({ route, navigation }) => {
   useEffect(() => {
     if (productId) {
       setIsLoading(true);
-      axios.get(`http://192.168.44.245:4000/api/inventory/${productId}`)
+      axios.get(`https://jbackend-production.up.railway.app/api/inventory/${productId}`)
         .then(response => {
           setProduct(response.data);
           setIsLoading(false);
@@ -35,7 +35,7 @@ const ProductDetailScreen = ({ route, navigation }) => {
       return;
     }
     setIsLoading(true);
-    axios.put(`http://192.168.44.245:4000/api/inventory/${productId}`, { stock: quantity })
+    axios.put(`https://jbackend-production.up.railway.app/api/inventory/${productId}`, { stock: quantity })
       .then(() => {
         Alert.alert('Success', 'Stock updated successfully!');
         setProducts(prevProducts => 
@@ -61,7 +61,7 @@ const ProductDetailScreen = ({ route, navigation }) => {
         { text: 'Cancel', style: 'cancel' },
         { text: 'Delete', onPress: () => {
             setIsLoading(true);
-            axios.delete(`http://192.168.44.245:4000/api/inventory/${productId}`)
+            axios.delete(`https://jbackend-production.up.railway.app/api/inventory/${productId}`)
               .then(() => {
                 setProducts(prevProducts => prevProducts.filter(item => item._id !== productId));
                 navigation.goBack();
@@ -86,7 +86,7 @@ const ProductDetailScreen = ({ route, navigation }) => {
     }
 
     setIsLoading(true);
-    axios.post('http://192.168.44.245:4000/api/sales', {
+    axios.post('https://jbackend-production.up.railway.app/api/sales', {
       productId,
       quantity,
       sellingPrice: price,
