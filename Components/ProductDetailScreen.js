@@ -13,10 +13,12 @@ const ProductDetailScreen = ({ route, navigation }) => {
   const [sellingPrice, setSellingPrice] = useState('');
   const { products, setProducts } = useContext(InventoryContext);
 
+  const baseUrl = 'http://192.168.44.245:4000'; // Ensure this is your correct base URL
+
   useEffect(() => {
     if (productId) {
       setIsLoading(true);
-      axios.get(`https://jbackend-production.up.railway.app/api/inventory/${productId}`)
+      axios.get(`${baseUrl}/api/inventory/${productId}`)
         .then(response => {
           setProduct(response.data);
           setIsLoading(false);
@@ -35,11 +37,11 @@ const ProductDetailScreen = ({ route, navigation }) => {
       return;
     }
     setIsLoading(true);
-    axios.put(`https://jbackend-production.up.railway.app/api/inventory/${productId}`, { stock: quantity })
+    axios.put(`${baseUrl}/api/inventory/${productId}`, { stock: quantity })
       .then(() => {
         Alert.alert('Success', 'Stock updated successfully!');
-        setProducts(prevProducts => 
-          prevProducts.map(item => 
+        setProducts(prevProducts =>
+          prevProducts.map(item =>
             item._id === productId ? { ...item, stock: quantity } : item
           )
         );
@@ -61,7 +63,7 @@ const ProductDetailScreen = ({ route, navigation }) => {
         { text: 'Cancel', style: 'cancel' },
         { text: 'Delete', onPress: () => {
             setIsLoading(true);
-            axios.delete(`https://jbackend-production.up.railway.app/api/inventory/${productId}`)
+            axios.delete(`${baseUrl}/api/inventory/${productId}`)
               .then(() => {
                 setProducts(prevProducts => prevProducts.filter(item => item._id !== productId));
                 navigation.goBack();
@@ -79,14 +81,17 @@ const ProductDetailScreen = ({ route, navigation }) => {
   const handleRecordSale = () => {
     const quantity = parseInt(quantitySold, 10);
     const price = parseFloat(sellingPrice);
-
+  
+    // Log the price before API call
+    console.log('Selling Price before API call:', price);
+  
     if (isNaN(quantity) || quantity <= 0 || isNaN(price) || price <= 0) {
       Alert.alert('Error', 'Please enter valid values for quantity sold and selling price.');
       return;
     }
-
+  
     setIsLoading(true);
-    axios.post('https://jbackend-production.up.railway.app/api/sales', {
+    axios.post(`${baseUrl}/api/sales`, {
       productId,
       quantity,
       sellingPrice: price,
@@ -95,14 +100,16 @@ const ProductDetailScreen = ({ route, navigation }) => {
     .then(() => {
       Alert.alert('Success', 'Sale recorded successfully');
       setQuantitySold('');
-      setSellingPrice('');
+      setSellingPrice('');  // Reset only after success
     })
     .catch(error => {
       Alert.alert('Error', `Failed to record sale: ${error.message}`);
     })
     .finally(() => setIsLoading(false));
   };
-
+  
+  
+  // Render loading or product not found message
   if (!product) {
     return (
       <View style={styles.container}>
@@ -110,14 +117,13 @@ const ProductDetailScreen = ({ route, navigation }) => {
       </View>
     );
   }
+  
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
-      <Image source={{ uri: product.imageUrl }} style={styles.productImage} />
+      <Image source={{ uri: `${baseUrl}${product.imageUrl}` }} style={styles.productImage} />
       <Text style={styles.title}>{product.name}</Text>
       <Text style={styles.label}>Current Stock: {product.stock}</Text>
-
-      
 
       <Text style={styles.label}>Quantity Sold:</Text>
       <TextInput
@@ -137,10 +143,21 @@ const ProductDetailScreen = ({ route, navigation }) => {
         placeholder="Enter selling price"
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleRecordSale}>
-        <Icon name="save" size={20} color="#fff" style={styles.icon} />
-        <Text style={styles.buttonText}>Record Sale</Text>
-      </TouchableOpacity>
+<View style={styles.buttonContainer}>
+  <TouchableOpacity style={styles.button} onPress={handleRecordSale}>
+    <Icon name="save" size={20} color="#fff" style={styles.icon} />
+    <Text style={styles.buttonText}>Record Sale</Text>
+  </TouchableOpacity>
+
+  <TouchableOpacity 
+    style={styles.button}
+    onPress={() => navigation.navigate('SalesScreen')}
+  >
+    <Icon name="line-chart" size={24} color="#fff" />
+    <Text style={styles.buttonText}>View Sales</Text>
+  </TouchableOpacity>
+</View>
+
 
       <Text style={styles.label}>Update Stock Quantity:</Text>
       <TextInput
@@ -158,23 +175,16 @@ const ProductDetailScreen = ({ route, navigation }) => {
           <Text style={styles.buttonText}>Update Stock</Text>
         </TouchableOpacity>
       )}
-     
 
-      {/* Floating Delete Button */}
       <TouchableOpacity 
-        style={styles.floatingDeleteButton}
+        style={styles.button1}
         onPress={handleDeleteProduct}
       >
-        <Icon name="trash" size={24} color="#fff" />
+        <Icon name="trash" size={24} color="white" />
+        <Text style={styles.buttonText}> Delete Product</Text>
       </TouchableOpacity>
 
-      {/* Floating View Sales Button */}
-      <TouchableOpacity 
-        style={styles.floatingButton}
-        onPress={() => navigation.navigate('SalesScreen')}
-      >
-        <Icon name="line-chart" size={24} color="#fff" />
-      </TouchableOpacity>
+      
     </ScrollView>
   );
 };
@@ -204,6 +214,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
+    fontWeight: 'bold',
     marginVertical: 10,
     color: '#555',
   },
@@ -217,6 +228,15 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#007BFF',
+    paddingVertical: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginBottom: 10,
+  },
+  button1: {
+    backgroundColor: 'red',
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: 'center',

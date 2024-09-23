@@ -8,9 +8,12 @@ const ProductListScreen = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Define the base URL of your backend server (make sure to use the correct port if necessary)
+  const baseUrl = 'http://192.168.44.245:4000'; // Append port if needed
+
   const fetchProducts = async () => {
     try {
-      const response = await axios.get('https://jbackend-production.up.railway.app/api/inventory');
+      const response = await axios.get(`${baseUrl}/api/inventory`);
       setProducts(response.data);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -40,22 +43,21 @@ const ProductListScreen = ({ navigation }) => {
       onPress={() => navigation.navigate('ProductDetailScreen', { productId: item._id })}
     >
       <Image
-        source={{ uri: item.imageUrl }}
+        source={{ uri: `${baseUrl}${item.imageUrl}` }}  // Append the base URL to imageUrl
         style={styles.productImage}
         resizeMode="cover"
       />
       <View style={styles.textContainer}>
         <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.description}>{item.description}</Text>
         <Text style={styles.price}>MWK {item.price.toFixed(2)}</Text>
-        <Text style={styles.stock}>Stock: {item.stock}</Text>
+        <Text style={styles.description}>{item.description}</Text>
+        <Text style={styles.stock}>In Stock {item.stock}</Text>
       </View>
     </TouchableOpacity>
   );
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Product Inventory</Text>
       <TextInput
         style={styles.searchInput}
         placeholder="Search products..."
@@ -144,12 +146,13 @@ const styles = StyleSheet.create({
   price: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#007BFF',
+    color: 'green',
     marginBottom: 5,
   },
   stock: {
-    fontSize: 12,
-    color: '#666',
+    fontSize: 16,
+    fontWeight:'bold',
+    color: '#007BFF',
   },
   floatingButton: {
     position: 'absolute',

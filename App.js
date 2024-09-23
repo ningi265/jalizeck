@@ -9,6 +9,7 @@ import ProductDetailScreen from './Components/ProductDetailScreen';
 import AddProductScreen from './Components/AddProductScreen';
 import SalesScreen from './Components/SalesScreen';
 import { InventoryProvider } from './context/InventoryContext';
+import SaleDetailScreen from './Components/SalesDetailScreen';
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,7 @@ export default function App() {
               <Stack.Screen name="ProductDetailScreen" component={ProductDetailScreen} />
               <Stack.Screen name="AddProductScreen" component={AddProductScreen} />
               <Stack.Screen name="SalesScreen" component={SalesScreen} />
+              <Stack.Screen name="SalesDetailScreen" component={SaleDetailScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         </SafeAreaProvider>

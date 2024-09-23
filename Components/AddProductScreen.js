@@ -36,23 +36,32 @@ const AddProductScreen = ({ navigation }) => {
       Alert.alert('Error', 'Please fill in all fields');
       return;
     }
-
+  
     try {
-      const inventoryData = {
-        name,
-        description,
-        price: parseFloat(price),
-        category,
-        stock: parseInt(stock),
-        imageUrl: image,
-      };
-
-      const response = await axios.post('https://jbackend-production.up.railway.app/api/inventory', inventoryData, {
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('description', description);
+      formData.append('price', parseFloat(price));
+      formData.append('category', category);
+      formData.append('stock', parseInt(stock));
+      
+      // Append the image to the form data
+      const filename = image.split('/').pop();
+      const match = /\.(\w+)$/.exec(filename);
+      const ext = match ? `image/${match[1]}` : `image`;
+      
+      formData.append('image', {
+        uri: image,
+        name: filename,
+        type: ext,
+      });
+  
+      const response = await axios.post('http://192.168.44.245:4000/api/inventory', formData, {
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'multipart/form-data',
         },
       });
-
+  
       if (response.status === 201) {
         Alert.alert('Success', 'Product added successfully');
         navigation.goBack();
@@ -60,9 +69,11 @@ const AddProductScreen = ({ navigation }) => {
         Alert.alert('Error', 'Failed to add product');
       }
     } catch (error) {
+      console.error('Error:', error.message);
       Alert.alert('Error', 'Failed to add product. Please try again later.');
     }
   };
+  
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
