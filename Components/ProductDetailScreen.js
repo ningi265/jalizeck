@@ -117,22 +117,7 @@ const ProductDetailScreen = ({ route, navigation }) => {
       <Text style={styles.title}>{product.name}</Text>
       <Text style={styles.label}>Current Stock: {product.stock}</Text>
 
-      <Text style={styles.label}>Update Stock Quantity:</Text>
-      <TextInput
-        style={styles.input}
-        value={stockChange}
-        onChangeText={setStockChange}
-        keyboardType="numeric"
-        placeholder="Enter quantity"
-      />
-
-      {isLoading ? (
-        <ActivityIndicator size="large" color="#007BFF" />
-      ) : (
-        <TouchableOpacity style={styles.button} onPress={handleUpdateStock}>
-          <Text style={styles.buttonText}>Update Stock</Text>
-        </TouchableOpacity>
-      )}
+      
 
       <Text style={styles.label}>Quantity Sold:</Text>
       <TextInput
@@ -156,6 +141,24 @@ const ProductDetailScreen = ({ route, navigation }) => {
         <Icon name="save" size={20} color="#fff" style={styles.icon} />
         <Text style={styles.buttonText}>Record Sale</Text>
       </TouchableOpacity>
+
+      <Text style={styles.label}>Update Stock Quantity:</Text>
+      <TextInput
+        style={styles.input}
+        value={stockChange}
+        onChangeText={setStockChange}
+        keyboardType="numeric"
+        placeholder="Enter quantity"
+      />
+
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#007BFF" />
+      ) : (
+        <TouchableOpacity style={styles.button} onPress={handleUpdateStock}>
+          <Text style={styles.buttonText}>Update Stock</Text>
+        </TouchableOpacity>
+      )}
+     
 
       {/* Floating Delete Button */}
       <TouchableOpacity 

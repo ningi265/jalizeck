@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, RefreshControl, Alert, Image } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, RefreshControl, Alert, Image, TextInput } from 'react-native';
 import axios from 'axios';
 
 const ProductListScreen = ({ navigation }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const fetchProducts = async () => {
     try {
@@ -29,6 +30,10 @@ const ProductListScreen = ({ navigation }) => {
     fetchProducts();
   };
 
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const renderItem = ({ item }) => (
     <TouchableOpacity
       style={styles.itemContainer}
@@ -51,11 +56,17 @@ const ProductListScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Product Inventory</Text>
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Search products..."
+        value={searchQuery}
+        onChangeText={setSearchQuery}
+      />
       {loading ? (
         <ActivityIndicator size="large" color="#007BFF" />
       ) : (
         <FlatList
-          data={products}
+          data={filteredProducts}
           keyExtractor={(item) => item._id}
           renderItem={renderItem}
           numColumns={2}
@@ -86,6 +97,14 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     color: '#333',
     textAlign: 'center',
+  },
+  searchInput: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 10,
   },
   itemContainer: {
     flex: 1,
