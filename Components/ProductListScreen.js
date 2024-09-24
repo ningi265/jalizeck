@@ -9,7 +9,7 @@ const ProductListScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   // Define the base URL of your backend server (make sure to use the correct port if necessary)
-  const baseUrl = 'http://192.168.44.245:4000'; // Append port if needed
+  const baseUrl = 'https://jbackend-production.up.railway.app'; // Append port if needed
 
   const fetchProducts = async () => {
     try {

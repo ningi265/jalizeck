@@ -13,7 +13,7 @@ const ProductDetailScreen = ({ route, navigation }) => {
   const [sellingPrice, setSellingPrice] = useState('');
   const { products, setProducts } = useContext(InventoryContext);
 
-  const baseUrl = 'http://192.168.44.245:4000'; // Ensure this is your correct base URL
+  const baseUrl = 'https://jbackend-production.up.railway.app'; // Ensure this is your correct base URL
 
   useEffect(() => {
     if (productId) {

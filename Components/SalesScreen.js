@@ -17,7 +17,7 @@ const SalesScreen = ({ navigation }) => {
 
   const fetchSales = async () => {
     try {
-      const response = await axios.get(`http://192.168.44.245:4000/api/sales?page=${page}&limit=10`);
+      const response = await axios.get(`https://jbackend-production.up.railway.app/api/sales?page=${page}&limit=10`);
       const newSales = response.data;
   
       setSales(prevSales => {

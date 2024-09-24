@@ -56,7 +56,7 @@ const AddProductScreen = ({ navigation }) => {
         type: ext,
       });
   
-      const response = await axios.post('http://192.168.44.245:4000/api/inventory', formData, {
+      const response = await axios.post('https://jbackend-production.up.railway.app/api/inventory', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
